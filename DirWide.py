@@ -17,7 +17,7 @@ orangeC = (173, 86, 5)
 rosterSize = int(input('Roster Size? (1, 2, 3)'))
 if rosterSize not in [1, 2, 3]:
     raise ValueError('You dumb dumb')
-seasonLength = 1
+seasonLength = int(input('How many round robins in regular season (I\'d say like 1 maybe 2'))
 winX, winY = 900 + 100*rosterSize, 670 + 30*rosterSize
 goalTop = winY*.5 - 100
 goalBot = winY*.5 + 100

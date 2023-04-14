@@ -259,17 +259,15 @@ def playIt():
     schedule = roundRobin(conferences)
     autoQual = []
     playIn = []
-    for roundNum in range(len(schedule)):
-        print('ROUND', roundNum + 1)
-        for matchup in schedule[roundNum]:
-            series(matchup[0], matchup[1], 2, f'{getName(matchup[0], short)} reg season (bo{3})')
-            # pass
-        standingsUpdate()
-    if seasonLength > 1:
+    rrNum = 0
+    while rrNum < seasonLength:
         for roundNum in range(len(schedule)):
-            print('ROUND', roundNum + 12)
+            print('ROUND', roundNum + 1 + (rrNum * 11))
             for matchup in schedule[roundNum]:
-                series(matchup[1], matchup[0], 2, f'{getName(matchup[0], short)} reg season (bo{3})')
+                if rrNum % 2 == 0:
+                    series(matchup[0], matchup[1], 2, f'{getName(matchup[0], short)} reg season (bo{3})')
+                else:
+                    series(matchup[1], matchup[0], 2, f'{getName(matchup[0], short)} reg season (bo{3})')
             standingsUpdate()
     cPlayoffs = [ConfPlayoff(con.iloc[0:6, 0], getName(con.iloc[0, 0], short)) for con in cStandings]
     for i in range(3):

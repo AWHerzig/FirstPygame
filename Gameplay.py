@@ -150,7 +150,7 @@ def game(left, right, title='', user=False):
         if user:
             keys = pygame.key.get_pressed()
         for thing in discs:
-            if thing.controlled:
+            if thing.controlled == True:  # On purpose
                 dirs = keys[pygame.K_LEFT] + keys[pygame.K_RIGHT] + keys[pygame.K_UP] + keys[pygame.K_DOWN]
                 mul = 1 / math.sqrt(2) if dirs == 2 else 1
                 curAccel = accel * mul
@@ -161,6 +161,18 @@ def game(left, right, title='', user=False):
                 if keys[pygame.K_UP]:
                     thing.yV = max(thing.yV - curAccel, -thing.speed)
                 if keys[pygame.K_DOWN]:
+                    thing.yV = min(thing.yV + curAccel, thing.speed)
+            elif thing.controlled == 2:
+                dirs = keys[pygame.K_a] + keys[pygame.K_w] + keys[pygame.K_s] + keys[pygame.K_d]
+                mul = 1 / math.sqrt(2) if dirs == 2 else 1
+                curAccel = accel * mul
+                if keys[pygame.K_a]:
+                    thing.xV = max(thing.xV - curAccel, -thing.speed)
+                if keys[pygame.K_d]:
+                    thing.xV = min(thing.xV + curAccel, thing.speed)
+                if keys[pygame.K_w]:
+                    thing.yV = max(thing.yV - curAccel, -thing.speed)
+                if keys[pygame.K_s]:
                     thing.yV = min(thing.yV + curAccel, thing.speed)
             else:
                 comTarget = thing.target
@@ -210,18 +222,20 @@ def game(left, right, title='', user=False):
                 thing.xV *= 1 - decel
                 thing.yV *= 1 - decel
         if ball.x <= ball.rad and goalTop <= ball.y <= goalBot:  # Goal
-            if lastTouched in right.discs:
-                lastTouched.goals += 1
-            else:
-                lastTouched.ownGoals += 1
+            if lastTouched is not None:
+                if lastTouched in right.discs:
+                    lastTouched.goals += 1
+                else:
+                    lastTouched.ownGoals += 1
             rightScore += 1
             reset(things, spot=-1)
             timeSinceKick = 0
         elif ball.x + ball.rad >= winX and goalTop <= ball.y <= goalBot:
-            if lastTouched in left.discs:
-                lastTouched.goals += 1
-            else:
-                lastTouched.ownGoals += 1
+            if lastTouched is not None:
+                if lastTouched in left.discs:
+                    lastTouched.goals += 1
+                else:
+                    lastTouched.ownGoals += 1
             leftScore += 1
             reset(things, spot=1)
             timeSinceKick = 0

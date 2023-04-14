@@ -5,7 +5,7 @@ from Objects import *
 #A.discs[2].controlled = True
 #game(WAM, TUL, title='Check this shit out', watch=True)
 def userplay():
-    choice = int(input('1 to play, 2 to sim'))
+    choice = int(input('1 to play, 2 to sim, 3 for 1v1'))
     if choice == 1:
         for num in range(len(conferences)):
             print(f'Enter {num} for {getName(conferences[num][0], long)}')
@@ -31,7 +31,24 @@ def userplay():
         userTeam.discs[2] = user
         for i in userTeam.discs:
             print(i.speed, i.pow)
+        playIt()
+    elif choice == 2:
+        playIt()
+    elif choice == 3:
+        team1 = Team('Player 1', 'P1')
+        team1.discs[0].speed = 9
+        team1.discs[0].pow = 9
+        team1.discs[0].controlled = 2
+        team1.speed = 9
+        team1.power = 9
+        team2 = Team('Player 2', 'P2')
+        team2.discs[0].speed = 9
+        team2.discs[0].pow = 9
+        team2.discs[0].controlled = True
+        team2.speed = 9
+        team2.power = 9
+        game(team1, team2, 'P1 use WASD, P2 use arrows', True)
 
 
 userplay()
-playIt()
+

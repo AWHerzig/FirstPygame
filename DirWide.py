@@ -14,8 +14,10 @@ blackC = (0, 0, 0)
 whiteC = (255, 255, 255)
 purpleC = (48, 44, 143)
 orangeC = (173, 86, 5)
-rosterSize = 3
-seasonLength = 2
+rosterSize = int(input('Roster Size? (1, 2, 3)'))
+if rosterSize not in [1, 2, 3]:
+    raise ValueError('You dumb dumb')
+seasonLength = 1
 winX, winY = 900 + 100*rosterSize, 670 + 30*rosterSize
 goalTop = winY*.5 - 100
 goalBot = winY*.5 + 100

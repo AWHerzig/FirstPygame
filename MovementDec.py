@@ -129,11 +129,11 @@ def intercept(disc, ball):
 def cornerCorrect(x, y):
     if x < winX*.1 and y < winY*.1:
         return winX*.1, winY*.1
-    if x > winX*.9 and y < winY*.9:
+    if x > winX*.9 and y < winY*.1:
         return winX*.9, winY*.1
     if x < winX*.1 and y > winY*.9:
         return winX*.1, winY*.9
-    if x > winX*.9 and y < winY*.9:
+    if x > winX*.9 and y > winY*.9:
         return winX*.9, winY*.9
     return x, y
 

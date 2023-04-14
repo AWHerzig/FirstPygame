@@ -25,12 +25,12 @@ def userplay():
                 pass
         user = Disc(userTeam.ABR, 2, True)
         userStats = int(input('0 for Best Stats, 1 for Worst Stats, 2 for Average, 3 for Random'))
-        options = [(9, 9), (3, 3), (6, 6), (user.speed, user.power)]
+        options = [(9, 9), (3, 3), (6, 6), (user.speed, user.pow)]
         user.speed = options[userStats][0]
-        user.power = options[userStats][1]
+        user.pow = options[userStats][1]
         userTeam.discs[2] = user
         for i in userTeam.discs:
-            print(i, i.speed, i.power)
+            print(i.speed, i.pow)
 
 
 userplay()

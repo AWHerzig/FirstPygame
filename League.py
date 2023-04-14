@@ -7,11 +7,13 @@ short = 'S'  # I dunno why i need these but whatever
 
 
 def series(team1, team2, l=3, title='', playoff=False, watch=False):
-    #print(f'{team1} vs. {team2}')
+    if team1.containsControlled() or team2.containsControlled():
+        print(f'{team1} ({team1.bigWins}-{team1.bigLoss}) vs. {team2} ({team2.bigWins}-{team2.bigLoss})')
+        watch = True
     team1.wins = 0
     team2.wins = 0
     while team1.wins < l and team2.wins < l:
-        game(team1, team2, title=title, watch=watch)
+        game(team1, team2, title=title, user=watch)
     if team1.wins == l:
         print(f'{team1} beats {team2} {team1.wins}-{team2.wins}!')
         if not playoff:

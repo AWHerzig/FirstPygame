@@ -14,44 +14,38 @@ def reset(things, spot=0):
         i.yV = 0
         if isinstance(i, Ball):
             side = spot if spot != 0 else random.choice([1, -1])
-            i.x = numpy.random.normal(winX*.5 + (side*winX*.2), winX*.1)
-            i.y = numpy.random.normal(.5*winY, .1*winY)
+            i.x = numpy.random.normal(winX * .5 + (side * winX * .2), winX * .1)
+            i.y = numpy.random.normal(.5 * winY, .1 * winY)
 
 
-def game(left, right, title='', watch=False):
+def game(left, right, title='', user=False):
+    elapsed = 0
     random.shuffle(left.discs)
     for i in left.discs:
         i.pos = left.discs.index(i) + 1
     random.shuffle(right.discs)
     for i in right.discs:
         i.pos = right.discs.index(i) + 1
-    if left.containsControlled() or right.containsControlled() or watch:
-        userGame(left, right, user=True, title=title)
-    else:
-        userGame(left, right, user=False, title=title)
-
-
-def userGame(left, right, title='', user=False):
     if user:
         dud = input('game is gonna start now')
         pygame.init()
         out = pygame.display.set_mode((winX, winY))
-        pygame.display.set_caption(f'{left.ABR} v {right.ABR}; '+title)
+        pygame.display.set_caption(f'{left.ABR} v {right.ABR}; ' + title)
     ball = Ball()
     left.side = -1
     right.side = 1
     for i in left.discs:
         i.color = left.homeStrip
         i.side = -1
-        (i.startX, i.startY) = startSpots[rosterSize][i.pos-1]
+        (i.startX, i.startY) = startSpots[rosterSize][i.pos - 1]
         i.startX *= winX
         i.startY *= winY
     for i in right.discs:
         i.color = right.awayStrip
         i.side = 1
-        (i.startX, i.startY) = startSpots[rosterSize][i.pos-1]
-        i.startX = (1-i.startX) * winX
-        i.startY = (1-i.startY) * winY
+        (i.startX, i.startY) = startSpots[rosterSize][i.pos - 1]
+        i.startX = (1 - i.startX) * winX
+        i.startY = (1 - i.startY) * winY
     discs = left.discs + right.discs
     things = discs + [ball]
     if user:
@@ -66,6 +60,12 @@ def userGame(left, right, title='', user=False):
     kill = False
     reset(things)
     while (time > 0 or leftScore == rightScore) and not kill:
+        if elapsed > 300 and not user:
+            pygame.init()
+            out = pygame.display.set_mode((winX, winY))
+            pygame.display.set_caption(f'{left.ABR} v {right.ABR}; ' + title)
+            font = pygame.font.Font('freesansbold.ttf', 32)
+            user = True
         hits = False
         if user:
             pygame.time.delay(split)
@@ -74,6 +74,7 @@ def userGame(left, right, title='', user=False):
             timeSinceKick = 0
             barrierCrosses = 0
         time -= split
+        elapsed += split / 1000
         timeSinceKick += split
         outTime = round(time / 1000, 1) if time >= 0 else 'OT'
         if user:
@@ -83,7 +84,7 @@ def userGame(left, right, title='', user=False):
             textRect = text.get_rect()
             textRect.center = (winX // 2, 50)
             textRectL = textL.get_rect()
-            textRectL.center = (winX*.2, 50)
+            textRectL.center = (winX * .2, 50)
             textRectR = textR.get_rect()
             textRectR.center = (winX * .8, 50)
             for event in pygame.event.get():
@@ -100,8 +101,8 @@ def userGame(left, right, title='', user=False):
                         angle = math.atan(yDiff / xDiff) if xDiff != 0 else math.pi / 4
                         angle = angle + (math.pi if xDiff < 0 else 0)
                         veloMag = pythag(item.xV + item2.xV, item.yV + item2.yV)  # No idea if this'll work
-                        veloDir = math.atan(item.yV+item2.yV / item.xV+item2.xV) if item.xV != 0 else math.pi / 4
-                        veloDir = veloDir + (math.pi if item.xV+item2.xV < 0 else 0)
+                        veloDir = math.atan(item.yV + item2.yV / item.xV + item2.xV) if item.xV != 0 else math.pi / 4
+                        veloDir = veloDir + (math.pi if item.xV + item2.xV < 0 else 0)
                         ballVelo = abs(veloMag * math.cos(veloDir - angle)) + (item.pow + item2.pow)
                         ball.xV = ballVelo * math.cos(angle)
                         ball.yV = ballVelo * math.sin(angle)
@@ -114,11 +115,11 @@ def userGame(left, right, title='', user=False):
                     veloMag = math.sqrt(item.xV ** 2 + item.yV ** 2)
                     veloDir = math.atan(item.yV / item.xV) if item.xV != 0 else math.pi / 4
                     veloDir = veloDir + (math.pi if item.xV < 0 else 0)
-                    ballVelo = abs(veloMag*math.cos(veloDir-angle)) + item.pow
+                    ballVelo = abs(veloMag * math.cos(veloDir - angle)) + item.pow
                     if ball.rad >= ball.x or ball.x + ball.rad >= winX or ball.rad >= ball.y or ball.y + ball.rad >= winY:
                         ballVelo += 6
                         if ball.rad >= ball.x:
-                            angle += math.pi/2 if item.yV < 0 else -math.pi/2
+                            angle += math.pi / 2 if item.yV < 0 else -math.pi / 2
                         elif ball.x + ball.rad >= winX:
                             angle += math.pi / 2 if item.yV > 0 else -math.pi / 2
                         elif ball.rad >= ball.y:
@@ -127,8 +128,8 @@ def userGame(left, right, title='', user=False):
                             angle += math.pi / 2 if item.xV < 0 else -math.pi / 2
                     ball.xV = ballVelo * math.cos(angle)
                     ball.yV = ballVelo * math.sin(angle)
-                    #if xDiff * ball.xV < 0 or yDiff * ball.yV < 0:
-                        #print('bruhhhh')
+                    # if xDiff * ball.xV < 0 or yDiff * ball.yV < 0:
+                    # print('bruhhhh')
             for target in discs:  # Does it hit another disc
                 if item != target and item.inRangeOf(target):
                     velo = item.pow / 2
@@ -151,7 +152,7 @@ def userGame(left, right, title='', user=False):
         for thing in discs:
             if thing.controlled:
                 dirs = keys[pygame.K_LEFT] + keys[pygame.K_RIGHT] + keys[pygame.K_UP] + keys[pygame.K_DOWN]
-                mul = 1/math.sqrt(2) if dirs == 2 else 1
+                mul = 1 / math.sqrt(2) if dirs == 2 else 1
                 curAccel = accel * mul
                 if keys[pygame.K_LEFT]:
                     thing.xV = max(thing.xV - curAccel, -thing.speed)
@@ -167,8 +168,8 @@ def userGame(left, right, title='', user=False):
                 xToGo = comTarget[0] - thing.x
                 yToGo = comTarget[1] - thing.y
                 vectorMag = pythag(xToGo, yToGo)
-                scale = abs(thing.speed/vectorMag)
-                targetV = (xToGo*scale, yToGo*scale)
+                scale = abs(thing.speed / vectorMag)
+                targetV = (xToGo * scale, yToGo * scale)
                 if targetV[0] > thing.xV:
                     thing.xV = min(clamp(thing.xV + accel, -thing.speed, thing.speed), targetV[0])
                 if targetV[0] < thing.xV:
@@ -240,7 +241,7 @@ def userGame(left, right, title='', user=False):
                     curTextRect = curText.get_rect()
                     curText2Rect = curText2.get_rect()
                     curTextRect.center = (thing.x, thing.y)
-                    curText2Rect.center = (thing.x, thing.y+20)
+                    curText2Rect.center = (thing.x, thing.y + 20)
                     out.blit(curText, curTextRect)
                     out.blit(curText2, curText2Rect)
                     pygame.draw.line(out, whiteC, (thing.x, thing.y), thing.target)
@@ -267,6 +268,3 @@ def userGame(left, right, title='', user=False):
     else:
         winTeam = 'Game ended early.'
     # print(f'{left.ABR} {leftScore}-{rightScore} {right.ABR}')
-
-
-

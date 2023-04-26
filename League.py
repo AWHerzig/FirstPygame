@@ -163,22 +163,58 @@ def getName(team, length):
         print('We got a problem')
 
 
+def bracket(teams, name):
+    print(name, 'Championship Bracket')
+    if len(teams) == 6:
+        print('     ' + teams[0].ABR+'|')
+        print('        |____')
+        print(teams[3].ABR + '|    |    |')
+        print('   |____|    |')
+        print(teams[4].ABR + '|         |____')
+        print('     ' + teams[1].ABR+'|    |')
+        print('        |____|')
+        print(teams[2].ABR + '|    |')
+        print('   |____|')
+        print(teams[5].ABR + '|')
+    elif len(teams) == 5:
+        print('     ' + teams[0].ABR + '|')
+        print('        |____')
+        print(teams[3].ABR + '|    |    |')
+        print('   |____|    |')
+        print(teams[4].ABR + '|         |____')
+        print('     ' + teams[1].ABR + '|    |')
+        print('        |____|')
+        print('     '+teams[2].ABR+'|')
+    elif len(teams) == 4:
+        print(teams[0].ABR + '|')
+        print('   |____')
+        print(teams[3].ABR + '|    |')
+        print('        |____')
+        print(teams[2].ABR + '|    |')
+        print('   |____|')
+        print(teams[3].ABR + '|')
+
+
 class ConfPlayoff:
     def __init__(self, teams, name):
         self.QF = teams
-        for i in range(6):
+        for i in range(len(teams)):
             self.QF[i].seed = i+1
         self.name = name
-        self.SF = [teams[0], teams[1]]
+        bracket(teams, name)
+        self.SF = teams[0:2] if len(teams) == 6 else teams[0:3] if len(teams) == 5 else teams[0:4]
         self.Final = []
         self.Winner = None
         self.stage = 'QF'
 
     def playNext(self):
-        print(f'{self.name} {self.stage}')
+        if not (self.stage == 'QF' and len(self.QF) == 4):
+            print(f'{self.name} {self.stage}')
         if self.stage == 'QF':
-            self.SF.append(series(self.QF[2], self.QF[5], 3, f'{self.name} QF (bo{5})', playoff=True))
-            self.SF.append(series(self.QF[3], self.QF[4], 3, f'{self.name} QF (bo{5})', playoff=True))
+            if len(self.QF) > 5:
+                self.SF.append(series(self.QF[2], self.QF[5], 3, f'{self.name} QF (bo{5})', playoff=True))
+            if len(self.QF) > 4:
+                self.SF.append(series(self.QF[3], self.QF[4], 3, f'{self.name} QF (bo{5})', playoff=True))
             self.stage = 'SF'
         elif self.stage == 'SF':
             self.Final.append(series(self.SF[0], self.SF[3], 3, f'{self.name} SF (bo{5})', playoff=True))
@@ -269,7 +305,7 @@ def playIt():
                 else:
                     series(matchup[1], matchup[0], 2, f'{getName(matchup[0], short)} reg season (bo{3})')
             standingsUpdate()
-    cPlayoffs = [ConfPlayoff(con.iloc[0:6, 0], getName(con.iloc[0, 0], short)) for con in cStandings]
+    cPlayoffs = [ConfPlayoff(list(con.iloc[0:(len(con)//2), 0]), getName(con.iloc[0, 0], short)) for con in cStandings]
     for i in range(3):
         for con in cPlayoffs:
             con.playNext()

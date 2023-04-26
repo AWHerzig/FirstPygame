@@ -1,11 +1,7 @@
 from DirWide import *
 
 
-class Spot:  # So you can put it in the distance formula
-    def __init__(self, x, y, rad=0):
-        self.x = x
-        self.y = y
-        self.rad = rad
+
 
 
 def movementDec(left, right, ball):
@@ -61,7 +57,7 @@ def movement3(left, right, ball):
                 toBall.target = intercept(toBall, ball)
                 toBall.name = 'D. TO BALL'
                 team.remove(toBall)
-            xSpot = 50 if team[0].side == -1 else winX - 50
+            xSpot = winX*.17 if team[0].side == -1 else winX - winX*.17
             ySpot = winY * .5 + (-60 if ball.y < winY * .35 else 60 if ball.y > winY * .65 else 0)
             toGoal = closestTo(team, Spot(xSpot, ySpot))
             if toGoal is not None:  # 1 goes to goal

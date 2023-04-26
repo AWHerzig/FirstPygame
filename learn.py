@@ -51,4 +51,6 @@ def userplay():
 
 
 userplay()
+#WAM.discs[0].controlled = True
+#game(WAM, CHA, 'ooga booga', True)
 

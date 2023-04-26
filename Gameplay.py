@@ -14,7 +14,7 @@ def reset(things, spot=0):
         i.yV = 0
         if isinstance(i, Ball):
             side = spot if spot != 0 else random.choice([1, -1])
-            i.x = numpy.random.normal(winX * .5 + (side * winX * .2), winX * .1)
+            i.x = numpy.random.normal(winX * .5 + (side * winX * .15), winX * .07)
             i.y = numpy.random.normal(.5 * winY, .1 * winY)
 
 
@@ -204,14 +204,16 @@ def game(left, right, title='', user=False):
         for thing in things:  # Move the stuff
             thing.x += thing.xV
             thing.y += thing.yV
-            if thing.rad >= thing.x:  # Hit side wall left
+            for wall in walls:
+                wall.isTouching(thing)
+            """if thing.rad >= thing.x:  # Hit side wall left
                 thing.xV = abs(thing.xV)
             elif thing.x + thing.rad >= winX:  # Hit side wall right
                 thing.xV = -abs(thing.xV)
             if thing.rad >= thing.y:  # Hit ceiling
                 thing.yV = abs(thing.yV)
             elif thing.y + thing.rad >= winY:  # Hit floor
-                thing.yV = -abs(thing.yV)
+                thing.yV = -abs(thing.yV)"""
             if thing.x < 0 or thing.x > winX or thing.y < 0 or thing.y > winY:  # Something is stuck
                 barrierCrosses += 1
             if barrierCrosses > 100:
@@ -221,7 +223,7 @@ def game(left, right, title='', user=False):
             if isinstance(thing, Disc):  # Friction (only applies to discs)
                 thing.xV *= 1 - decel
                 thing.yV *= 1 - decel
-        if ball.x <= ball.rad and goalTop <= ball.y <= goalBot:  # Goal
+        if goalFront - 5 >= ball.x >= goalBack+40 and goalTop+20 <= ball.y <= goalBot-20:  # Goal
             if lastTouched is not None:
                 if lastTouched in right.discs:
                     lastTouched.goals += 1
@@ -230,7 +232,7 @@ def game(left, right, title='', user=False):
             rightScore += 1
             reset(things, spot=-1)
             timeSinceKick = 0
-        elif ball.x + ball.rad >= winX and goalTop <= ball.y <= goalBot:
+        elif winX-goalFront+5 <= ball.x <= winX-goalBack-40 and goalTop+20 <= ball.y <= goalBot-20:
             if lastTouched is not None:
                 if lastTouched in left.discs:
                     lastTouched.goals += 1
@@ -241,6 +243,8 @@ def game(left, right, title='', user=False):
             timeSinceKick = 0
         if user:
             out.fill(blackC)
+            out.fill((85, 194, 194), (goalBack+40, goalTop + 20, goalFront-goalBack-45, goalBot-goalTop-40))
+            out.fill((85, 194, 194), (winX - goalFront + 5, goalTop + 20, goalFront - goalBack - 45, goalBot - goalTop - 40))
             for thing in things:
                 pygame.draw.circle(out, thing.color, [thing.x, thing.y], thing.rad)
                 if thing.controlled:
@@ -262,10 +266,9 @@ def game(left, right, title='', user=False):
             out.blit(text, textRect)
             out.blit(textL, textRectL)
             out.blit(textR, textRectR)
-            pygame.draw.line(out, whiteC, (0, goalTop), (25, goalTop))
-            pygame.draw.line(out, whiteC, (0, goalBot), (25, goalBot))
-            pygame.draw.line(out, whiteC, (winX - 25, goalTop), (winX, goalTop))
-            pygame.draw.line(out, whiteC, (winX - 25, goalBot), (winX, goalBot))
+            for wall in walls:
+                pygame.draw.line(out, whiteC, wall.start, wall.end)
+                #pygame.draw.line(out, whiteC, wall.mid, wall.dpoint)
             pygame.display.update()
     if user:
         pygame.quit()

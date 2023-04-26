@@ -105,3 +105,5 @@ class Ball:
         self.color = color
         self.rad = 5
         self.controlled = False
+
+

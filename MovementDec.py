@@ -16,10 +16,12 @@ def movement1(left, right, ball):
         pi = intercept(disc, ball)
         angle = math.atan((disc.y - pi[1]) / (disc.x - pi[0]))
         if -math.pi / 4 <= angle <= math.pi / 4 and isBehind(disc, ball):
+            disc.name = 'TO BALL'
             disc.target = pi
         else:
             disc.target = (50 if disc.side == -1 else winX - 50,
                            winY * .5 + (-60 if ball.y < winY * .35 else 60 if ball.y > winY * .65 else 0))
+            disc.name = 'BACK'
 
 
 def movement3(left, right, ball):

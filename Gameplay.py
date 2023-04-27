@@ -18,7 +18,7 @@ def reset(things, spot=0):
             i.y = numpy.random.normal(.5 * winY, .1 * winY)
 
 
-def game(left, right, title='', user=False):
+def game(left, right, title='', user=False, playoff=False):
     elapsed = 0
     random.shuffle(left.discs)
     for i in left.discs:
@@ -275,13 +275,15 @@ def game(left, right, title='', user=False):
     if leftScore > rightScore:
         winTeam = 'Blue wins!!!'
         left.wins += 1
-        left.smallWins += 1
-        right.smallLoss += 1
+        if not playoff:
+            left.smallWins += 1
+            right.smallLoss += 1
     elif rightScore > leftScore:
         winTeam = 'Orange wins!!!'
         right.wins += 1
-        right.smallWins += 1
-        left.smallLoss += 1
+        if not playoff:
+            right.smallWins += 1
+            left.smallLoss += 1
     else:
         winTeam = 'Game ended early.'
     # print(f'{left.ABR} {leftScore}-{rightScore} {right.ABR}')

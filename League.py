@@ -13,7 +13,7 @@ def series(team1, team2, l=3, title='', playoff=False, watch=False):
     team1.wins = 0
     team2.wins = 0
     while team1.wins < l and team2.wins < l:
-        game(team1, team2, title=title, user=watch)
+        game(team1, team2, title=title, user=watch, playoff=playoff)
     if team1.wins == l:
         print(f'{team1} beats {team2} {team1.wins}-{team2.wins}!')
         if not playoff:
@@ -247,6 +247,7 @@ class Regional:
         for i in range(8):
             self.QF[i].seed = i+1
         self.name = name
+        print(name, 'Bracket')
         bracket(teams, name)
         self.SF = []
         self.Final = []

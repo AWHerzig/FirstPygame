@@ -28,7 +28,7 @@ def userplay():
         options = [(9, 9), (3, 3), (6, 6), (user.speed, user.pow)]
         user.speed = options[userStats][0]
         user.pow = options[userStats][1]
-        userTeam.discs[2] = user
+        userTeam.discs[0] = user
         for i in userTeam.discs:
             print(i.speed, i.pow)
         playIt()

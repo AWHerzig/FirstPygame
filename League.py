@@ -164,35 +164,52 @@ def getName(team, length):
 
 
 def bracket(teams, name):
-    print(name, 'Championship Bracket')
-    if len(teams) == 6:
-        print('     ' + teams[0].ABR+'|')
+    if len(teams) == 8:
+        print(teams[0].ABR + '|')
+        print('   |____')
+        print(teams[7].ABR + '|    |')
         print('        |____')
-        print(teams[3].ABR + '|    |    |')
-        print('   |____|    |')
-        print(teams[4].ABR + '|         |____')
-        print('     ' + teams[1].ABR+'|    |')
-        print('        |____|')
+        print(teams[3].ABR + '|    |')
+        print('   |____|')
+        print(teams[4].ABR + '|')
+        print()
+        print(teams[1].ABR + '|')
+        print('   |____')
+        print(teams[6].ABR + '|    |')
+        print('        |____')
         print(teams[2].ABR + '|    |')
         print('   |____|')
         print(teams[5].ABR + '|')
-    elif len(teams) == 5:
-        print('     ' + teams[0].ABR + '|')
-        print('        |____')
-        print(teams[3].ABR + '|    |    |')
-        print('   |____|    |')
-        print(teams[4].ABR + '|         |____')
-        print('     ' + teams[1].ABR + '|    |')
-        print('        |____|')
-        print('     '+teams[2].ABR+'|')
-    elif len(teams) == 4:
-        print(teams[0].ABR + '|')
-        print('   |____')
-        print(teams[3].ABR + '|    |')
-        print('        |____')
-        print(teams[2].ABR + '|    |')
-        print('   |____|')
-        print(teams[3].ABR + '|')
+    else:
+        print(name, 'Championship Bracket')
+        if len(teams) == 6:
+            print('     ' + teams[0].ABR+'|')
+            print('        |____')
+            print(teams[3].ABR + '|    |    |')
+            print('   |____|    |')
+            print(teams[4].ABR + '|         |____')
+            print('     ' + teams[1].ABR+'|    |')
+            print('        |____|')
+            print(teams[2].ABR + '|    |')
+            print('   |____|')
+            print(teams[5].ABR + '|')
+        elif len(teams) == 5:
+            print('     ' + teams[0].ABR + '|')
+            print('        |____')
+            print(teams[3].ABR + '|    |    |')
+            print('   |____|    |')
+            print(teams[4].ABR + '|         |____')
+            print('     ' + teams[1].ABR + '|    |')
+            print('        |____|')
+            print('     '+teams[2].ABR+'|')
+        elif len(teams) == 4:
+            print(teams[0].ABR + '|')
+            print('   |____')
+            print(teams[3].ABR + '|    |')
+            print('        |____')
+            print(teams[2].ABR + '|    |')
+            print('   |____|')
+            print(teams[3].ABR + '|')
 
 
 class ConfPlayoff:
@@ -230,6 +247,7 @@ class Regional:
         for i in range(8):
             self.QF[i].seed = i+1
         self.name = name
+        bracket(teams, name)
         self.SF = []
         self.Final = []
         self.Winner = None
@@ -305,6 +323,7 @@ def playIt():
                 else:
                     series(matchup[1], matchup[0], 2, f'{getName(matchup[0], short)} reg season (bo{3})')
             standingsUpdate()
+        rrNum += 1
     cPlayoffs = [ConfPlayoff(list(con.iloc[0:(len(con)//2), 0]), getName(con.iloc[0, 0], short)) for con in cStandings]
     for i in range(3):
         for con in cPlayoffs:

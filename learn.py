@@ -29,8 +29,12 @@ def userplay():
         user.speed = options[userStats][0]
         user.pow = options[userStats][1]
         userTeam.discs[0] = user
+        userTeam.speed = 0
+        userTeam.power = 0
         for i in userTeam.discs:
             print(i.speed, i.pow)
+            userTeam.speed += i.speed
+            userTeam.power += i.pow
         playIt()
     elif choice == 2:
         playIt()

@@ -14,7 +14,7 @@ def reset(things, spot=0):
         i.yV = 0
         if isinstance(i, Ball):
             side = spot if spot != 0 else random.choice([1, -1])
-            i.x = numpy.random.normal(winX * .5 + (side * winX * .15), winX * .07)
+            i.x = numpy.random.normal(winX * .5 + (side * winX * .15), winX * .05)
             i.y = numpy.random.normal(.5 * winY, .1 * winY)
 
 

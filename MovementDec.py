@@ -77,7 +77,7 @@ def movement3(left, right, ball):
                 weakSide.name = 'D. WEAKSIDE'
                 team.remove(weakSide)
             for disc in team:  # Leftovers
-                xSpot = winX * .1 if team[0].side == -1 else winX * .9
+                xSpot = winX * .2 if team[0].side == -1 else winX * .8
                 ySpot = winY * .5
                 disc.name = 'LEFTOVER'
                 disc.target = (xSpot, ySpot)

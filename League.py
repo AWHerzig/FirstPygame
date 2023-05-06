@@ -207,9 +207,9 @@ def bracket(teams, name):
             print('   |____')
             print(teams[3].ABR + '|    |')
             print('        |____')
-            print(teams[2].ABR + '|    |')
+            print(teams[1].ABR + '|    |')
             print('   |____|')
-            print(teams[3].ABR + '|')
+            print(teams[2].ABR + '|')
 
 
 class ConfPlayoff:

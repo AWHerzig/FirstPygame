@@ -24,11 +24,15 @@ def userplay():
             except IndexError:
                 pass
         user = Disc(userTeam.ABR, 2, True)
-        userStats = int(input('0 for Best Stats, 1 for Worst Stats, 2 for Average, 3 for Random'))
-        options = [(9, 9), (3, 3), (6, 6), (user.speed, user.pow)]
+        userStats = int(input('0 for Best Stats, 1 for Worst Stats, 2 for Average, 3 for Random, 4 for god squad'))
+        options = [(9, 9), (3, 3), (6, 6), (user.speed, user.pow), (9, 9)]
         user.speed = options[userStats][0]
         user.pow = options[userStats][1]
         userTeam.discs[0] = user
+        if userStats == 4:
+            for disc in userTeam.discs:
+                disc.speed = 9
+                disc.pow = 9
         userTeam.speed = 0
         userTeam.power = 0
         for i in userTeam.discs:

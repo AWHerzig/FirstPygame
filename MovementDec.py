@@ -19,7 +19,7 @@ def movement1(left, right, ball):
             disc.name = 'TO BALL'
             disc.target = pi
         else:
-            disc.target = (50 if disc.side == -1 else winX - 50,
+            disc.target = (winX*.17 if disc.side == -1 else winX - winX*.17,
                            winY * .5 + (-60 if ball.y < winY * .35 else 60 if ball.y > winY * .65 else 0))
             disc.name = 'BACK'
 
